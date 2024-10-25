@@ -142,7 +142,8 @@ func (light *BtcLightMirrorV2) CheckMerkle() error {
 func calculateMerkleRoot(coinbaseHash *chainhash.Hash, merkleNodes []chainhash.Hash) chainhash.Hash {
 	res := coinbaseHash
 	for _, node := range merkleNodes {
-		res = blockchain.HashMerkleBranches(res, &node)
+		branches := blockchain.HashMerkleBranches(res, &node)
+		res = &branches
 	}
 	return *res
 }

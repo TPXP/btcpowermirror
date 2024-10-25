@@ -214,7 +214,7 @@ func BuildMerkleTreeStore(coinbaseHash *chainhash.Hash, transactions []chainhash
 	nextPoT := nextPowerOfTwo(len(transactions) + 1)
 	arraySize := nextPoT*2 - 1
 	merkles := make([]*chainhash.Hash, arraySize)
-	
+
 	// Create the base transaction hashes and populate the array with them.
 	merkles[0] = coinbaseHash
 	for i, _ := range transactions {
@@ -234,13 +234,13 @@ func BuildMerkleTreeStore(coinbaseHash *chainhash.Hash, transactions []chainhash
 		// hashing the concatenation of the left child with itself.
 		case merkles[i+1] == nil:
 			newHash := blockchain.HashMerkleBranches(merkles[i], merkles[i])
-			merkles[offset] = newHash
+			merkles[offset] = &newHash
 
 		// The normal case sets the parent node to the double sha256
 		// of the concatentation of the left and right children.
 		default:
 			newHash := blockchain.HashMerkleBranches(merkles[i], merkles[i+1])
-			merkles[offset] = newHash
+			merkles[offset] = &newHash
 		}
 		offset++
 	}
